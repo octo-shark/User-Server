@@ -1,0 +1,27 @@
+{
+  "name": "timemate-users",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon ./server.js",
+    "create-db": "createdb timemate; knex migrate:latest; knex seed:run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/octo-shark/User-Server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/octo-shark/User-Server/issues"
+  },
+  "homepage": "https://github.com/octo-shark/User-Server#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "knex": "^0.15.2",
+    "pg": "^7.6.1"
+  }
+}
