@@ -4,9 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node testPg.js",
     "server": "nodemon ./server.js",
-    "create-db": "createdb timemate; knex migrate:latest; knex seed:run"
+    "create-db": "createdb timemate; knex migrate:latest; knex seed:run",
+    "rds-db": "knex migrate:latest --env staging; knex seed:run"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,10 @@
   },
   "homepage": "https://github.com/octo-shark/User-Server#readme",
   "dependencies": {
+    "aws-sdk": "latest",
     "body-parser": "^1.18.3",
+    "dotenv": "^6.1.0",
+    "ejs": "latest",
     "express": "^4.16.4",
     "knex": "^0.15.2",
     "pg": "^7.6.1"

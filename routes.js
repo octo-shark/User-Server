@@ -1,7 +1,10 @@
 const express = require('express');
 const router = require('express').Router();
 const db = require('./database/db.js');
-const knex = require('knex')
+const options = require('./knexfile');
+require('dotenv').config();
+let env = process.env.ENVIRONMENT || 'development';
+const knex = require('knex')(options[env]);
 
 //   This route is for testing only, not for production
 //Get user info from users table;
@@ -13,6 +16,7 @@ router.get('/allUsers', (req, res) => {
     res.status(500).send();
   })
 });
+
 
 //Get list of all activities
 router.get('/allActivities', (req, res) => {
