@@ -33,8 +33,8 @@ router.get('/allActivities', (req, res) => {
 
 //Get list of a users current activities
 router.get('/currentActivities', (req, res) => {
-  //console.log(req.query.id)
-  db.getCurrentActivities(req.query.id)
+  //console.log(req.body.id)
+  db.getCurrentActivities(req.body.id)
   .then(data => {
     res.status(200).json(data);
   })
@@ -48,8 +48,8 @@ router.get('/currentActivities', (req, res) => {
 //Insert new activity into activities table
 router.post('/newActivity', (req, res) => {
   let activity = {
-    activity_name: req.query.activity,
-    color: req.query.color
+    activity_name: req.body.activity,
+    color: req.body.color
   }
   
   db.insertNewActivity(activity)
@@ -63,9 +63,9 @@ router.post('/newActivity', (req, res) => {
 });
 
 router.post('/initialCurrentActivities', (req, res) => {
-  //console.log(req.query);
-  let activities = req.query.activities
-  db.initializeCurrentActivities(JSON.parse(activities), req.query.id)
+  //console.log(req.body);
+  let activities = req.body.activities
+  db.initializeCurrentActivities(JSON.parse(activities), req.body.id)
   .then(() => 
     res.status(201).send(`successfully created activities for user`)
   )
@@ -77,8 +77,8 @@ router.post('/initialCurrentActivities', (req, res) => {
 
 //Update the users current activities in their specific current activities table
 router.post('/updateCurrentActivities', (req, res) => {
-  //console.log(req.query);
-  db.updateCurrentActivities(req.query.userId, req.query.activityId, req.query.index)
+  //console.log(req.body);
+  db.updateCurrentActivities(req.body.userId, req.body.activityId, req.body.index)
   .then(() => 
     res.status(201).send(`successfully updated activities`)
   )
@@ -92,9 +92,9 @@ router.post('/updateCurrentActivities', (req, res) => {
 //Insert new user into users table
 router.post('/newUser', (req, res) => {
   let user = {
-    email: req.query.email,
-    username: req.query.username,
-    password: req.query.password
+    email: req.body.email,
+    username: req.body.username,
+    password: req.body.password
   }
 
   db.insertNewUser(user)
