@@ -25,7 +25,7 @@ module.exports = {
   staging: {
     client: 'pg',
     connection: {
-      database: 'timemate_users',
+      database:  process.env.RDS_DB,
       host     : process.env.RDS_HOSTNAME,
       user     : process.env.RDS_USERNAME,
       password : process.env.RDS_PASSWORD,

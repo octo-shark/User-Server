@@ -1,10 +1,12 @@
 const options = require('../knexfile');
-let env = 'development';
+require('dotenv').config();
+let env = process.env.ENVIRONMENT || 'development';
 const knex = require('knex')(options[env]);
 
 //This function is for test purposes only, not for production
 module.exports.getAllUsers = async () => {
   let users = await knex.select('*').from('users');
+  console.log(users);
   return users;
 }
 
