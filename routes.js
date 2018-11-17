@@ -20,8 +20,7 @@ router.get('/allUsers', (req, res) => {
 router.get('/allActivities', (req, res) => {
   db.getAllActivities()
   .then(data => {
-    console.log(data);
-    res.status(200).json(data)
+    res.status(200).send(data)
   })
   .catch(err => {
     console.log('error: ', err);
@@ -31,7 +30,6 @@ router.get('/allActivities', (req, res) => {
 
 //Get list of a users current activities
 router.get('/currentActivities', (req, res) => {
-  //console.log(req.body.id)
   db.getCurrentActivities(req.body.id)
   .then(data => {
     res.status(200).json(data);
@@ -61,7 +59,6 @@ router.post('/newActivity', (req, res) => {
 });
 
 router.post('/initialCurrentActivities', (req, res) => {
-  //console.log(req.body);
   let activities = req.body.activities
   db.initializeCurrentActivities(JSON.parse(activities), req.body.id)
   .then(() => 
@@ -75,7 +72,6 @@ router.post('/initialCurrentActivities', (req, res) => {
 
 //Update the users current activities in their specific current activities table
 router.post('/updateCurrentActivities', (req, res) => {
-  //console.log(req.body);
   db.updateCurrentActivities(req.body.userId, req.body.activityId, req.body.index)
   .then(() => 
     res.status(201).send(`successfully updated activities`)
