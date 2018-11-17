@@ -6,12 +6,13 @@ const knex = require('knex')(options[env]);
 //This function is for test purposes only, not for production
 module.exports.getAllUsers = async () => {
   let users = await knex.select('*').from('users');
-  console.log(users);
+  //console.log(users);
   return users;
 }
 
 module.exports.getAllActivities = async () => {
   let result = await knex.select('*').from('activities');
+  //console.log(result);
   return result;
 };
 
