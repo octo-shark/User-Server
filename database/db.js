@@ -16,6 +16,7 @@ module.exports.getAllUsers = async () => {
 
 module.exports.getAllActivities = async () => {
   let result = await knex.select('*').from('activities');
+  //console.log(result);
   return result;
 };
 

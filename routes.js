@@ -27,7 +27,7 @@ router.get('/allUsers', (req, res) => {
 router.get('/allActivities', (req, res) => {
   db.getAllActivities()
   .then(data => {
-    res.status(200).json(data)
+    res.status(200).send(data)
   })
   .catch(err => {
     console.log('error: ', err);
