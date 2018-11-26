@@ -3,10 +3,14 @@ require('dotenv').config();
 let env = process.env.ENVIRONMENT || 'development';
 const knex = require('knex')(options[env]);
 
+module.exports.getUser = async (username) => {
+  let user = await knex.select('*').from('users').where({'username':username});
+  return user;
+}
+
 //This function is for test purposes only, not for production
 module.exports.getAllUsers = async () => {
   let users = await knex.select('*').from('users');
-  console.log(users);
   return users;
 }
 

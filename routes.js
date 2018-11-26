@@ -1,12 +1,19 @@
-const express = require('express');
-const router = require('express').Router();
-const db = require('./database/db.js');
-const options = require('./knexfile');
 require('dotenv').config();
 
+const router = require('express').Router();
+const db = require('./database/db.js');
 
-//   This route is for testing only, not for production
 //Get user info from users table;
+router.get('/:userID', (req, res) => {
+  db.getUser(req.params.userID)
+  .then((data) => res.status(200).send(data))
+  .catch((err) => {
+    console.log('error: ', err);
+    res.status(500).send();
+  })
+});
+
+// This route is for testing only, not for production
 router.get('/allUsers', (req, res) => {
   db.getAllUsers()
   .then((data) => res.status(200).send(data))
@@ -20,7 +27,6 @@ router.get('/allUsers', (req, res) => {
 router.get('/allActivities', (req, res) => {
   db.getAllActivities()
   .then(data => {
-    console.log(data);
     res.status(200).json(data)
   })
   .catch(err => {
@@ -31,7 +37,6 @@ router.get('/allActivities', (req, res) => {
 
 //Get list of a users current activities
 router.get('/currentActivities', (req, res) => {
-  //console.log(req.body.id)
   db.getCurrentActivities(req.body.id)
   .then(data => {
     res.status(200).json(data);
@@ -41,7 +46,6 @@ router.get('/currentActivities', (req, res) => {
     res.status(500).send();
   })
 });
-
 
 //Insert new activity into activities table
 router.post('/newActivity', (req, res) => {
@@ -61,7 +65,6 @@ router.post('/newActivity', (req, res) => {
 });
 
 router.post('/initialCurrentActivities', (req, res) => {
-  //console.log(req.body);
   let activities = req.body.activities
   db.initializeCurrentActivities(JSON.parse(activities), req.body.id)
   .then(() => 
@@ -75,7 +78,6 @@ router.post('/initialCurrentActivities', (req, res) => {
 
 //Update the users current activities in their specific current activities table
 router.post('/updateCurrentActivities', (req, res) => {
-  //console.log(req.body);
   db.updateCurrentActivities(req.body.userId, req.body.activityId, req.body.index)
   .then(() => 
     res.status(201).send(`successfully updated activities`)
