@@ -47,6 +47,18 @@ router.get('/currentActivities', (req, res) => {
   })
 });
 
+//Get activity names based on user's current activity id #'s
+router.get('/activityNames', (req, res) => {
+  db.getActivityNames(req.body.activityArray)
+  .then(data => {
+    res.status(200).json(data);
+  })
+  .catch(err => {
+    console.log('error: ', err)
+    res.status(500).send();
+  });
+})
+
 //Insert new activity into activities table
 router.post('/newActivity', (req, res) => {
   let activity = {

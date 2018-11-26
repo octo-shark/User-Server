@@ -1,6 +1,6 @@
 const options = require('../knexfile');
 require('dotenv').config();
-let env = process.env.ENVIRONMENT || 'development';
+let env = 'development';
 const knex = require('knex')(options[env]);
 
 module.exports.getUser = async (username) => {
@@ -60,4 +60,11 @@ module.exports.updateCurrentActivities = async(userId, activityId, index) => {
 module.exports.insertNewUser = async (user) => {
   let newUser = await knex('users').insert(user);
   return newUser;
+}
+
+module.exports.getActivityNames = async (activityArray) => {
+  let names = await knex.select('*')
+  .from('activities')
+  .whereIn('activity_id', activityArray);
+  return names;
 }
