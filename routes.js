@@ -3,7 +3,7 @@ require('dotenv').config();
 const router = require('express').Router();
 const db = require('./database/db.js');
 
-//Get user info from users table;
+//Get user info from users table;     //------ Keep/Modify
 router.get('/:userID', (req, res) => {
   db.getUser(req.params.userID)
   .then((data) => res.status(200).send(data))
@@ -13,17 +13,17 @@ router.get('/:userID', (req, res) => {
   })
 });
 
-// This route is for testing only, not for production
-router.get('/allUsers', (req, res) => {
-  db.getAllUsers()
-  .then((data) => res.status(200).send(data))
-  .catch((err) => {
-    console.log('error: ', err);
-    res.status(500).send();
-  })
-});
+// This route is for testing only, not for production //--------delete
+// router.get('/allUsers', (req, res) => {
+//   db.getAllUsers()
+//   .then((data) => res.status(200).send(data))
+//   .catch((err) => {
+//     console.log('error: ', err);
+//     res.status(500).send();
+//   })
+// });
 
-//Get list of all activities
+//Get list of all activities //----------Keep
 router.get('/allActivities', (req, res) => {
   db.getAllActivities()
   .then(data => {
@@ -35,7 +35,7 @@ router.get('/allActivities', (req, res) => {
   });
 });
 
-//Get list of a users current activities
+//Get list of a users current activities // ------------modify/combine
 router.get('/currentActivities', (req, res) => {
   db.getCurrentActivities(req.body.id)
   .then(data => {
@@ -47,7 +47,7 @@ router.get('/currentActivities', (req, res) => {
   })
 });
 
-//Get activity names based on user's current activity id #'s
+//Get activity names based on user's current activity id #'s //--------- modify/combine
 router.get('/activityNames', (req, res) => {
   db.getActivityNames(req.body.activityArray)
   .then(data => {

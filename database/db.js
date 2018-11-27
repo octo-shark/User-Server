@@ -1,26 +1,26 @@
 const options = require('../knexfile');
 require('dotenv').config();
-let env = 'development';
+let env = process.env.ENVIRONMENT || 'development';
 const knex = require('knex')(options[env]);
 
-module.exports.getUser = async (username) => {
+const getUser = async (username) => {
   let user = await knex.select('*').from('users').where({'username':username});
   return user;
 }
 
 //This function is for test purposes only, not for production
-module.exports.getAllUsers = async () => {
-  let users = await knex.select('*').from('users');
-  return users;
-}
+// const getAllUsers = async () => {
+//   let users = await knex.select('*').from('users');
+//   return users;
+// }
 
-module.exports.getAllActivities = async () => {
+const getAllActivities = async () => {
   let result = await knex.select('*').from('activities');
   //console.log(result);
   return result;
 };
 
-module.exports.getCurrentActivities = async (id) => {
+const getCurrentActivities = async (id) => {
   let result = await knex.select('current_activities_array')
   .from('current_activities')
   .where({
@@ -30,13 +30,13 @@ module.exports.getCurrentActivities = async (id) => {
   return result;
 }
 
-module.exports.insertNewActivity = async (activity) => {
+const insertNewActivity = async (activity) => {
   console.log(`attempting to insert ${activity.activity_name}`);
   let newActivity = await knex('activities').insert(activity);
   return newActivity;
 }
 
-module.exports.initializeCurrentActivities = async (activities, userId) => {
+const initializeCurrentActivities = async (activities, userId) => {
   let currentUserActivities = await 
     knex('current_activities')
       .where( {current_activities_id: userId} )
@@ -44,7 +44,7 @@ module.exports.initializeCurrentActivities = async (activities, userId) => {
   return currentUserActivities;
 }
 
-module.exports.updateCurrentActivities = async(userId, activityId, index) => {
+const updateCurrentActivities = async(userId, activityId, index) => {
   let newActivities = await knex.select('current_activities_array')
     .from('current_activities')
     .where({'current_activities_id' : userId})
@@ -57,14 +57,26 @@ module.exports.updateCurrentActivities = async(userId, activityId, index) => {
     .update({current_activities_array: newActivities});
 }
 
-module.exports.insertNewUser = async (user) => {
+const insertNewUser = async (user) => {
   let newUser = await knex('users').insert(user);
   return newUser;
 }
 
-module.exports.getActivityNames = async (activityArray) => {
+const getActivityNames = async (activityArray) => {
   let names = await knex.select('*')
   .from('activities')
   .whereIn('activity_id', activityArray);
   return names;
+}
+
+module.exports = {
+  getUser: getUser,
+  //getAllUsers: getAllUsers,
+  getAllActivities: getAllActivities,
+  getCurrentActivities: getCurrentActivities,
+  insertNewActivity: insertNewActivity,
+  initializeCurrentActivities: initializeCurrentActivities,
+  updateCurrentActivities: updateCurrentActivities,
+  insertNewUser: insertNewUser,
+  getActivityNames: getActivityNames
 }
