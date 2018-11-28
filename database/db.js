@@ -9,104 +9,96 @@ const knex = require('knex')(options[env]);
   //   return users;
   // }
 
+//------------------ GET METHODS --------------------------------------------------------------------//
+
 const getUser = async (username) => {
   let user = await knex.select('id', 'email', 'username').from('users').where({'username':username});
-  //console.log(user);
   return user[0];
 }
 
-  
-const getAllActivities = async () => {
-  let result = await knex.select('*').from('activities');
-  //console.log(result);
-  return result;
-};
-  
-//---------------- Not in Use -------------------------------//
-// const getActivityNames = async (activityArray) => {
-//   let names = await knex.select('*')
-//     .from('activities')
-//     .whereIn('activity_id', activityArray);
-//   return names;
-// }
-//----------------------------------------------------------//
-
 const getHistoricalActivities = async (id) => {
   let history = knex.select('*')
-    .from('activities')
-    .where({'owner' : id})
-    return history;
+  .from('activities')
+  .where({'owner' : id})
+  return history;
 }
 
 const getCurrentActivities = async (id) => {
   let result = await knex.select('current_activities_array')
-    .from('current_activities')
-    .where({
-      'current_activities_id' : id
-    })
-    .then((data) => data[0].current_activities_array);
-  //console.log(result);
+  .from('current_activities')
+  .where({
+    'current_activities_id' : id
+  })
+  .then((data) => data[0].current_activities_array);
   return result;
 }
 
 const exportCurrentUserData = async (username) => {
   let user = await getUser(username);
-  //console.log(user);
   let activities = await getCurrentActivities(user.id);
-  //console.log(activities)
   let history = await getHistoricalActivities(user.id);
   let data = {
-    user: user,
-    historicalActivities: history,
-    currentActivities: activities
+    activities: history,
+    assigned_activities: activities,
+    account: user
   }
   console.log(data);
 }
+
+const getAllActivities = async () => {
+  let result = await knex.select('*').from('activities');
+  console.log(result);
+  return result;
+};
+
+//---------------- Not in Use -------------------------------//
+// const getActivityNames = async (activityArray) => {
+  //   let names = await knex.select('*')
+  //     .from('activities')
+  //     .whereIn('activity_id', activityArray);
+  //   return names;
+  // }
+//----------------------------------------------------------//
+
+//------------------ POST METHODS --------------------------------------------------------------------//
 
 const insertNewActivity = async (activity) => {
   console.log(`attempting to insert ${activity.activity_name}`);
   let newActivity = await knex('activities').insert(activity);
   return newActivity;
-}
+};
 
-//------------ need to refactor both functions to work properly -----------------\\
-const initializeCurrentActivities = async (activities, userId) => {
+const updateCurrentActivities = async (activities, userId) => {
+  if(activities.length > 8) {
+    console.log('invalid array length');
+    throw new Error('invalid array length');
+  }
   let currentUserActivities = await 
     knex('current_activities')
       .where( {current_activities_id: userId} )
       .update( {current_activities_array : activities} )
   return currentUserActivities;
-}
-
-const updateCurrentActivities = async(userId, activityId, index) => {
-  let newActivities = await knex.select('current_activities_array')
-    .from('current_activities')
-    .where({'current_activities_id' : userId})
-    .then( (data) => data[0].current_activities_array);
-
-  newActivities.splice(index, 1, parseInt(activityId));
-
-  return knex('current_activities')
-    .where({current_activities_id: parseInt(userId)})
-    .update({current_activities_array: newActivities});
-}
-//--------------------------------------------------------------------------------\\
+};
 
 const insertNewUser = async (user) => {
-  let newUser = await knex('users').insert(user);
+  let newUser = await knex('users').insert(user)
+    .then(() => 
+      knex('current_activities').insert({
+        current_activities_id: knex.select('id').from('users').where({'username': user.username}), 
+        current_activities_array: Array(8).fill(0,0,8)
+      }))
   return newUser;
-}
+};
 
 module.exports = {
   getUser: getUser,
-  //getAllUsers: getAllUsers,
   getHistoricalActivities: getHistoricalActivities,
   getAllActivities: getAllActivities,
   getCurrentActivities: getCurrentActivities,
   exportCurrentUserData: exportCurrentUserData,
   insertNewActivity: insertNewActivity,
-  initializeCurrentActivities: initializeCurrentActivities,
   updateCurrentActivities: updateCurrentActivities,
   insertNewUser: insertNewUser,
+  //getAllUsers: getAllUsers,
   //getActivityNames: getActivityNames
-}
+};

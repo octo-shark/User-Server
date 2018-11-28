@@ -3,7 +3,7 @@ require('dotenv').config();
 const router = require('express').Router();
 const db = require('./database/db.js');
 
-//Get user info from users table;     //------ Keep/Modify
+//Get user info from users table;
 router.get('/:userID', (req, res) => {
   db.exportCurrentUserData(req.params.userID)
   .then((data) => res.status(200).send(data))
@@ -12,25 +12,12 @@ router.get('/:userID', (req, res) => {
     res.status(500).send();
   })
 });
+//db.exportCurrentUserData('ethan')
 
-// This route is for testing only, not for production //--------delete
-// router.get('/allUsers', (req, res) => {
-//   db.getAllUsers()
-//   .then((data) => res.status(200).send(data))
-//   .catch((err) => {
-//     console.log('error: ', err);
-//     res.status(500).send();
-//   })
-// });
-//db.getUser('mitch');
-db.exportCurrentUserData('mitch')
-
-//Get list of all activities //----------Keep
+//Get list of all activities
 router.get('/allActivities', (req, res) => {
   db.getAllActivities()
-  .then(data => {
-    res.status(200).send(data)
-  })
+  .then(data => res.status(200).send(data))
   .catch(err => {
     console.log('error: ', err);
     res.status(500).send()
@@ -38,30 +25,7 @@ router.get('/allActivities', (req, res) => {
 });
 //db.getAllActivities();
 
-//Get list of a users current activities // ------------modify/combine
-router.get('/currentActivities', (req, res) => {
-  db.getCurrentActivities(req.body.id)
-  .then(data => {
-    res.status(200).json(data);
-  })
-  .catch(err => {
-    console.log('error: ', err);
-    res.status(500).send();
-  })
-});
-//db.getCurrentActivities(96);
-
-//Get activity names based on user's current activity id #'s //--------- modify/combine
-router.get('/activityNames', (req, res) => {
-  db.getActivityNames(req.body.activityArray)
-  .then(data => {
-    res.status(200).json(data);
-  })
-  .catch(err => {
-    console.log('error: ', err)
-    res.status(500).send();
-  });
-})
+//----------------------------------POST METHODS---------------------------------------------//
 
 //Insert new activity into activities table
 router.post('/newActivity', (req, res) => {
@@ -72,19 +36,18 @@ router.post('/newActivity', (req, res) => {
   }
   
   db.insertNewActivity(activity)
-  .then(() => 
-  res.status(201).send(`${activity.activity_name} successfully inserted`)
-  )
+  .then(() => res.status(201).send(`${activity.activity_name} successfully inserted`))
   .catch(err => {
     console.log('error: ', err);
     res.status(500).send();
   });
 });
-//db.insertNewActivity({activity_name: 'golfing', color: 'Hot Pink', owner: 96})
+//db.insertNewActivity({activity_name: 'golding', color: '#', owner: 113})
 
-router.post('/initialCurrentActivities', (req, res) => {
+//Update the users current activities in their specific current activities table
+router.post('/updateCurrentActivities', (req, res) => {
   let activities = req.body.activities
-  db.initializeCurrentActivities(JSON.parse(activities), req.body.id)
+  db.updateCurrentActivities(activities, req.body.id)
   .then(() => 
     res.status(201).send(`successfully created activities for user`)
   )
@@ -93,19 +56,7 @@ router.post('/initialCurrentActivities', (req, res) => {
     res.status(500).send();
   });
 })
-//db.initializeCurrentActivities(([70]), 99);
-
-//Update the users current activities in their specific current activities table
-router.post('/updateCurrentActivities', (req, res) => {
-  db.updateCurrentActivities(req.body.userId, req.body.activityId, req.body.index)
-  .then(() => 
-    res.status(201).send(`successfully updated activities`)
-  )
-  .catch(err => {
-    console.log('error: ', err);
-    res.status(500).send();
-  })
-});
+//db.updateCurrentActivities(([76, 77, 77, 77, 76, 77, 77, 79]), 98);
 
 //******  needs to be refactored when authentication is implemented **********
 //Insert new user into users table
@@ -117,13 +68,17 @@ router.post('/newUser', (req, res) => {
   }
 
   db.insertNewUser(user)
-  .then(() => 
-    res.status(201).send('user successfully inserted')
-  )
+  .then(() => res.status(201).send('user successfully inserted'))
   .catch(err => {
     console.log('error: ', err)
     res.status(500).send();
   });
 });
+
+// db.insertNewUser({
+//   email: 'NotARealEmail@NotGmail.com',
+//   username: 'someUserName',
+//   password: '12345'
+// });
 
 module.exports = router;
