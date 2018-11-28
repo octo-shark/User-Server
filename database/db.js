@@ -10,23 +10,32 @@ const knex = require('knex')(options[env]);
   // }
 
 const getUser = async (username) => {
-  let user = await knex.select('*').from('users').where({'username':username});
-  console.log(user);
-  return user;
+  let user = await knex.select('id', 'email', 'username').from('users').where({'username':username});
+  //console.log(user);
+  return user[0];
 }
 
   
 const getAllActivities = async () => {
   let result = await knex.select('*').from('activities');
-  console.log(result);
+  //console.log(result);
   return result;
 };
   
-const getActivityNames = async (activityArray) => {
-  let names = await knex.select('*')
+//---------------- Not in Use -------------------------------//
+// const getActivityNames = async (activityArray) => {
+//   let names = await knex.select('*')
+//     .from('activities')
+//     .whereIn('activity_id', activityArray);
+//   return names;
+// }
+//----------------------------------------------------------//
+
+const getHistoricalActivities = async (id) => {
+  let history = knex.select('*')
     .from('activities')
-    .whereIn('activity_id', activityArray);
-  return names;
+    .where({'owner' : id})
+    return history;
 }
 
 const getCurrentActivities = async (id) => {
@@ -36,21 +45,22 @@ const getCurrentActivities = async (id) => {
       'current_activities_id' : id
     })
     .then((data) => data[0].current_activities_array);
-     //console.log(result);
+  //console.log(result);
   return result;
 }
 
 const exportCurrentUserData = async (username) => {
   let user = await getUser(username);
-  console.log(user);
-  //let activityNames = await getActivityNames()
-  let activities = await getCurrentActivities(id);
-  let names = await getActivityNames(activities);
+  //console.log(user);
+  let activities = await getCurrentActivities(user.id);
+  //console.log(activities)
+  let history = await getHistoricalActivities(user.id);
   let data = {
     user: user,
-    activities: names
+    historicalActivities: history,
+    currentActivities: activities
   }
-  //console.log(data);
+  console.log(data);
 }
 
 const insertNewActivity = async (activity) => {
@@ -90,6 +100,7 @@ const insertNewUser = async (user) => {
 module.exports = {
   getUser: getUser,
   //getAllUsers: getAllUsers,
+  getHistoricalActivities: getHistoricalActivities,
   getAllActivities: getAllActivities,
   getCurrentActivities: getCurrentActivities,
   exportCurrentUserData: exportCurrentUserData,
@@ -97,5 +108,5 @@ module.exports = {
   initializeCurrentActivities: initializeCurrentActivities,
   updateCurrentActivities: updateCurrentActivities,
   insertNewUser: insertNewUser,
-  getActivityNames: getActivityNames
+  //getActivityNames: getActivityNames
 }

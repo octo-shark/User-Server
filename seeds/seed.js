@@ -17,16 +17,16 @@ exports.seed = function(knex, Promise) {
     )
     .then(() => 
       knex('activities').insert([
-        {activity_name: 'send emails', color: 'blue'},
-        {activity_name: 'phone calls', color: 'red'},
-        {activity_name: 'do work', color: 'green'},
-        {activity_name: 'break time', color: 'yellow'},
-        {activity_name: 'coffee break', color: 'brown'},
-        {activity_name: 'meetings', color: 'orange'},
-        {activity_name: 'lunch', color: 'pink'},
-        {activity_name: 'bathroom break', color: 'purple'},
-        {activity_name: 'business reports', color: 'silver'},
-        {activity_name: 'clean office', color: 'gold'}
+        {activity_name: 'send emails', color: 'blue', owner: knex.select('id').from('users').where({'username': 'mitch'})},
+        {activity_name: 'phone calls', color: 'red', owner: knex.select('id').from('users').where({'username': 'mitch'})},
+        {activity_name: 'do work', color: 'green', owner: knex.select('id').from('users').where({'username': 'mitch'})},
+        {activity_name: 'break time', color: 'yellow', owner: knex.select('id').from('users').where({'username': 'mitch'})},
+        {activity_name: 'coffee break', color: 'brown', owner: knex.select('id').from('users').where({'username': 'mitch'})},
+        {activity_name: 'meetings', color: 'orange', owner: knex.select('id').from('users').where({'username': 'mitch'})},
+        {activity_name: 'lunch', color: 'pink', owner: knex.select('id').from('users').where({'username': 'mitch'})},
+        {activity_name: 'bathroom break', color: 'purple', owner: knex.select('id').from('users').where({'username': 'mitch'})},
+        {activity_name: 'business reports', color: 'silver', owner: knex.select('id').from('users').where({'username': 'chris'})},
+        {activity_name: 'clean office', color: 'gold', owner: knex.select('id').from('users').where({'username': 'rikki'})}
       ])
     )
     .then(async () => {
@@ -38,3 +38,5 @@ exports.seed = function(knex, Promise) {
       return knex('current_activities').insert([...result])
     })
 };
+
+//knex.select('id').from('users').where({'username': 'mitch'})
