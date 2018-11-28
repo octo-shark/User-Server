@@ -22,7 +22,8 @@ router.get('/:userID', (req, res) => {
 //     res.status(500).send();
 //   })
 // });
-
+//db.exportCurrentUserData(16)
+//db.getUser('mitch');
 //Get list of all activities //----------Keep
 router.get('/allActivities', (req, res) => {
   db.getAllActivities()
@@ -34,7 +35,7 @@ router.get('/allActivities', (req, res) => {
     res.status(500).send()
   });
 });
-
+//db.getAllActivities();
 //Get list of a users current activities // ------------modify/combine
 router.get('/currentActivities', (req, res) => {
   db.getCurrentActivities(req.body.id)
@@ -87,7 +88,7 @@ router.post('/initialCurrentActivities', (req, res) => {
     res.status(500).send();
   });
 })
-
+//db.initializeCurrentActivities(([31,32,33,34,35,36,37,38]), 16);
 //Update the users current activities in their specific current activities table
 router.post('/updateCurrentActivities', (req, res) => {
   db.updateCurrentActivities(req.body.userId, req.body.activityId, req.body.index)
