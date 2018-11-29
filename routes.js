@@ -12,7 +12,6 @@ router.get('/:userID', (req, res) => {
     res.status(500).send();
   })
 });
-//db.exportCurrentUserData('ethan')
 
 //Get list of all activities
 router.get('/allActivities', (req, res) => {
@@ -23,7 +22,6 @@ router.get('/allActivities', (req, res) => {
     res.status(500).send()
   });
 });
-//db.getAllActivities();
 
 //----------------------------------POST METHODS---------------------------------------------//
 
@@ -42,7 +40,6 @@ router.post('/newActivity', (req, res) => {
     res.status(500).send();
   });
 });
-//db.insertNewActivity({activity_name: 'golding', color: '#', owner: 113})
 
 //Update the users current activities in their specific current activities table
 router.post('/updateCurrentActivities', (req, res) => {
@@ -56,7 +53,6 @@ router.post('/updateCurrentActivities', (req, res) => {
     res.status(500).send();
   });
 })
-//db.updateCurrentActivities(([76, 77, 77, 77, 76, 77, 77, 79]), 98);
 
 //******  needs to be refactored when authentication is implemented **********
 //Insert new user into users table
@@ -74,11 +70,4 @@ router.post('/newUser', (req, res) => {
     res.status(500).send();
   });
 });
-
-// db.insertNewUser({
-//   email: 'NotARealEmail@NotGmail.com',
-//   username: 'someUserName',
-//   password: '12345'
-// });
-
 module.exports = router;
