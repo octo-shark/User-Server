@@ -45,5 +45,3 @@ exports.seed = function(knex, Promise) {
       return knex('current_activities').insert([...result])
     })
 };
-
-//knex.select('id').from('users').where({'username': 'mitch'})
