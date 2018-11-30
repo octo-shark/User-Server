@@ -6,7 +6,32 @@ const db = require('./database/db.js');
 //Get user info from users table;
 router.get('/:userID', (req, res) => {
   db.exportCurrentUserData(req.params.userID)
-  .then((data) => res.status(200).send(data))
+  .then((data) => {
+    console.log("Data from export function:" ,data)
+    if(!data){
+      console.log('user not found, Routes.js')
+      let user = {
+        email: req.body.email,
+        username: req.body.username,
+        password: req.body.password
+      }
+      db.insertNewUser(user)
+      .then(() => {
+        db.getUser(user.email)
+        .then(user => {
+          db.getCurrentActivities(user.id).then((activities) =>{
+            console.log(activities)
+            res.status(201).send(JSON.stringify({user, activities}))
+          })
+        })
+        return;
+      })
+      .catch(err => {
+        console.log('error: ', err)
+        res.status(500).send();
+      });
+    }
+  })
   .catch((err) => {
     console.log('error: ', err);
     res.status(500).send();
@@ -56,18 +81,18 @@ router.post('/updateCurrentActivities', (req, res) => {
 
 //******  needs to be refactored when authentication is implemented **********
 //Insert new user into users table
-router.post('/newUser', (req, res) => {
-  let user = {
-    email: req.body.email,
-    username: req.body.username,
-    password: req.body.password
-  }
+// router.post('/newUser', (req, res) => {
+//   let user = {
+//     email: req.body.email,
+//     username: req.body.username,
+//     password: req.body.password
+//   }
 
-  db.insertNewUser(user)
-  .then(() => res.status(201).send('user successfully inserted'))
-  .catch(err => {
-    console.log('error: ', err)
-    res.status(500).send();
-  });
-});
+//   db.insertNewUser(user)
+//   .then(() => res.status(201).send('user successfully inserted'))
+//   .catch(err => {
+//     console.log('error: ', err)
+//     res.status(500).send();
+//   });
+// });
 module.exports = router;

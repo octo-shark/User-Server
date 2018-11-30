@@ -12,7 +12,7 @@ exports.seed = function(knex, Promise) {
         {email: 'chris@gmail.com', username: 'chris', password: '12345'},
         {email: 'ethan@gmail.com', username: 'ethan', password: '12345'},
         {email: 'rikki@gmail.com', username: 'rikki', password: '12345'},
-        {email: 'steven@gmail.com', username: 'steven', password: '12345'}
+        {email: 'stephen@gmail.com', username: 'stephen', password: '12345'}
       ])
     )
     .then(() => 
@@ -27,7 +27,7 @@ exports.seed = function(knex, Promise) {
         {activity_name: 'lunch', color: 'pink', owner: knex.select('id').from('users').where({'username': 'mitch'})},
         {activity_name: 'bathroom break', color: 'purple', owner: knex.select('id').from('users').where({'username': 'mitch'})},
         {activity_name: 'business reports', color: 'silver', owner: knex.select('id').from('users').where({'username': 'chris'})},
-        {activity_name: 'Browsing Reddit', color: 'crimson', owner: knex.select('id').from('users').where({'username': 'steven'})},
+        {activity_name: 'Browsing Reddit', color: 'crimson', owner: knex.select('id').from('users').where({'username': 'stephen'})},
         {activity_name: 'Complaining', color: '#', owner: knex.select('id').from('users').where({'username': 'ethan'})},
         {activity_name: 'Walking in Circles', color: '#', owner: knex.select('id').from('users').where({'username': 'ethan'})},
         {activity_name: 'Debugging', color: '$', owner: knex.select('id').from('users').where({'username': 'rikki'})},

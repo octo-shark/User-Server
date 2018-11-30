@@ -11,8 +11,11 @@ const knex = require('knex')(options[env]);
 
 //------------------ GET METHODS --------------------------------------------------------------------//
 
-const getUser = async (username) => {
-  let user = await knex.select('id', 'email', 'username').from('users').where({'username':username});
+const getUser = async (email) => {
+  let user = await knex.select('id', 'email', 'username').from('users').where({email});
+  if(!user){
+    return null
+  }
   return user[0];
 }
 
@@ -33,8 +36,11 @@ const getCurrentActivities = async (id) => {
   return result;
 }
 
-const exportCurrentUserData = async (username) => {
-  let user = await getUser(username);
+const exportCurrentUserData = async (email) => { // this variable here is the unique google ID google gives us. FIX ME?
+  let user = await getUser(email);
+  if(!user){
+    return;
+  }
   let activities = await getCurrentActivities(user.id);
   let history = await getHistoricalActivities(user.id);
   let data = {
@@ -42,6 +48,7 @@ const exportCurrentUserData = async (username) => {
     assigned_activities: activities,
     account: user
   }
+  return data;
   console.log(data);
 }
 
@@ -87,6 +94,7 @@ const insertNewUser = async (user) => {
         current_activities_id: knex.select('id').from('users').where({'username': user.username}), 
         current_activities_array: Array(8).fill(0,0,8)
       }))
+  console.log('newUser inserted: ',newUser);
   return newUser;
 };
 
