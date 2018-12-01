@@ -20,10 +20,9 @@ const getUser = async (googleID) => {
 }
 
 const getHistoricalActivities = async (id) => {
-  let history = knex.select('*')
+  let historicalActivities = knex.select('*')
   .from('activities')
-  .where({'owner' : id})
-  return history;
+  return historicalActivities;
 }
 
 const getCurrentActivities = async (id) => {

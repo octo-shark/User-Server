@@ -10,7 +10,7 @@ router.get('/:userID', (req, res) => {
   db.exportCurrentUserData(req.params.userID)
   .then((data) => {
     console.log("Data from export function:" ,data)
-    if(!data){
+    if(!data){ 
       console.log('user not found, Routes.js')
       let user = {
         googleID: req.params.userID,
@@ -21,7 +21,7 @@ router.get('/:userID', (req, res) => {
         db.getUser(user.googleID)
         .then(user => {
           db.getCurrentActivities(user.id).then((activities) =>{
-            console.log(activities)
+            console.log('Inserting new user with activities: ',activities)
             res.status(201).send(JSON.stringify({user, activities}))
             return;
           })
@@ -32,7 +32,7 @@ router.get('/:userID', (req, res) => {
         res.status(500).send();
       });
     }else{
-      res.status(200).send(JSON.stringify({user: data.googleID, activities: data.activities, assigned_activities: data.assigned_activities}))
+      res.status(200).send(JSON.stringify({user: data.account, activities: data.activities, assigned_activities: data.assigned_activities}))
     }
 
   })
@@ -59,7 +59,6 @@ router.post('/newActivity', (req, res) => {
   let activity = {
     activity_name: req.body.activity,
     color: req.body.color,
-    owner: req.body.id
   }
   
   db.insertNewActivity(activity)
