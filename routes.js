@@ -5,15 +5,16 @@ const db = require('./database/db.js');
 
 //Get user info from users table;
 router.get('/:userID', (req, res) => {
+  console.log('req.params.userID: ', req.params.userID);
+  
   db.exportCurrentUserData(req.params.userID)
   .then((data) => {
     console.log("Data from export function:" ,data)
     if(!data){
       console.log('user not found, Routes.js')
       let user = {
-        googleID: req.body.googleID,
+        googleID: req.params.userID,
         username: req.body.username,
-        password: req.body.password
       }
       db.insertNewUser(user)
       .then(() => {
@@ -30,8 +31,9 @@ router.get('/:userID', (req, res) => {
         console.log('error: ', err)
         res.status(500).send();
       });
+    }else{
+      res.status(200).send(JSON.stringify({user: data.googleID, activities: data.activities, assigned_activities: data.assigned_activities}))
     }
-    res.status(200).send(JSON.stringify({user: data.account, activities: data.activities, assigned_activities: data.assigned_activities}))
 
   })
   .catch((err) => {

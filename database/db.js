@@ -27,6 +27,7 @@ const getHistoricalActivities = async (id) => {
 }
 
 const getCurrentActivities = async (id) => {
+  console.log('getCurrentAct: ', id)
   let result = await knex.select('current_activities_array')
   .from('current_activities')
   .where({
@@ -88,11 +89,17 @@ const updateCurrentActivities = async (activities, userId) => {
 };
 
 const insertNewUser = async (user) => {
+  let ids;
+  knex.select('activity_id').from('activities').limit(8).then((data) =>{
+    ids = data;
+    let expample=ids.map(i => {return i.activity_id})
+    console.log('activityIDs', expample)
+  })
   let newUser = await knex('users').insert(user)
     .then(() => 
       knex('current_activities').insert({
-        current_activities_id: knex.select('id').from('users').where({'username': user.username}), 
-        current_activities_array: Array(8).fill(0,0,8)
+        current_activities_id: knex.select('id').from('users').where({googleID: user.googleID}), 
+        current_activities_array: ids.map(i => {return i.activity_id}) //[473,474,475,476,474,478,479,480]
       }))
   console.log('newUser inserted: ',newUser);
   return newUser;
