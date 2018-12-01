@@ -4,7 +4,6 @@ exports.up = function(knex, Promise) {
     table.increments('activity_id').primary();
     table.string('activity_name').unique();
     table.string('color');
-    table.integer('owner');
   })
 };
 

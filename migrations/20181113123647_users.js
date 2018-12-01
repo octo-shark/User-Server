@@ -3,14 +3,13 @@ exports.up = function(knex, Promise) {
   return knex.schema
   .createTable('users', (table) => {
       table.increments('id').primary();
-      table.string('email').unique();
+      table.string('googleID').unique();
       table.string('username');
-      table.string('password');
+      table.integer('current_activities_id');
     })
     .createTable('current_activities', (table) => {
       table.integer('current_activities_id');
       table.specificType('current_activities_array', 'integer ARRAY [8]');
-      table.foreign('current_activities_id').references('id').inTable('users');
     })
 };
 

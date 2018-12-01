@@ -8,40 +8,43 @@ exports.seed = function(knex, Promise) {
     .then(() => 
       // Inserts seed entries
        knex('users').insert([
-        {email: 'mitch@gmail.com', username: 'mitch', password: '12345'},
-        {email: 'chris@gmail.com', username: 'chris', password: '12345'},
-        {email: 'ethan@gmail.com', username: 'ethan', password: '12345'},
-        {email: 'rikki@gmail.com', username: 'rikki', password: '12345'},
-        {email: 'stephen@gmail.com', username: 'stephen', password: '12345'}
+        {googleID: 'Null1', username: 'mitch', current_activities: 1},
+        {googleID: 'Null2', username: 'chris', current_activities: 2},
+        {googleID: 'Null3', username: 'ethan', current_activities: 3},
+        {googleID: 'Null4', username: 'rikki', current_activities: 4},
+        {googleID: 'Null5', username: 'stephen', current_activities: 5}
       ])
     )
+
+    /*
+    '1': {color: '#b9f6ca', name: 'Reading'},
+    '2': {color: '#84ffff', name: 'Phone Calls'},
+    '3': {color: '#b388ff', name: 'Browsing Reddit'},
+    '4': {color: '#ff80ab', name: 'Walking in Circles'},
+    '26': {color: '#ff9e80', name: 'Complaining'},
+    '33': {color: '#ffff8d', name: 'Debugging'},
+    '66': {color: '#80d8ff', name: 'Lunch'},
+    '76': {color: '#ea80fc', name: 'Napping'}
+    */
     .then(() => 
       knex('activities').insert([
-        {activity_name: 'Activity Not Set', color: '#'},
-        {activity_name: 'send emails', color: 'blue', owner: knex.select('id').from('users').where({'username': 'mitch'})},
-        {activity_name: 'phone calls', color: 'red', owner: knex.select('id').from('users').where({'username': 'mitch'})},
-        {activity_name: 'do work', color: 'green', owner: knex.select('id').from('users').where({'username': 'mitch'})},
-        {activity_name: 'break time', color: 'yellow', owner: knex.select('id').from('users').where({'username': 'mitch'})},
-        {activity_name: 'coffee break', color: 'brown', owner: knex.select('id').from('users').where({'username': 'mitch'})},
-        {activity_name: 'meetings', color: 'orange', owner: knex.select('id').from('users').where({'username': 'mitch'})},
-        {activity_name: 'lunch', color: 'pink', owner: knex.select('id').from('users').where({'username': 'mitch'})},
-        {activity_name: 'bathroom break', color: 'purple', owner: knex.select('id').from('users').where({'username': 'mitch'})},
-        {activity_name: 'business reports', color: 'silver', owner: knex.select('id').from('users').where({'username': 'chris'})},
-        {activity_name: 'Browsing Reddit', color: 'crimson', owner: knex.select('id').from('users').where({'username': 'stephen'})},
-        {activity_name: 'Complaining', color: '#', owner: knex.select('id').from('users').where({'username': 'ethan'})},
-        {activity_name: 'Walking in Circles', color: '#', owner: knex.select('id').from('users').where({'username': 'ethan'})},
-        {activity_name: 'Debugging', color: '$', owner: knex.select('id').from('users').where({'username': 'rikki'})},
-        {activity_name: 'napping', color: '#', owner: knex.select('id').from('users').where({'username': 'rikki'})},
-        {activity_name: 'clean office', color: 'gold', owner: knex.select('id').from('users').where({'username': 'chris'})}
+        {activity_name: 'Reading', color: '#b9f6ca'},
+        {activity_name: 'Phone Calls', color: '#84ffff'},
+        {activity_name: 'Browsing Reddit', color: '#b388ff'},
+        {activity_name: 'Complaining', color: '#ff80ab'},
+        {activity_name: 'Walking in Circles', color: '#ff9e80'},
+        {activity_name: 'Debugging', color: '#ffff8d'},
+        {activity_name: 'Napping', color: '#80d8ff'},
+        {activity_name: 'Lunch', color: '#ea80fc'}
       ])
     )
     .then(async () => {
       const users = await knex.select().from('users');
-      const firstActivity = await knex.select('activity_id').from('activities').where({'activity_name': 'Activity Not Set'});
-      const result = await users.map(user => {
+      const firstActivity = await knex.select('activity_id').from('activities');
+      console.log(firstActivity)
+      const result = await users.map((user, i) => {
         return {current_activities_id: user.id, current_activities_array: Array(8).fill(firstActivity[0].activity_id,0,8)}
       })
-      // console.log(users);
       return knex('current_activities').insert([...result])
     })
 };

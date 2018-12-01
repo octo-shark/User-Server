@@ -11,26 +11,28 @@ router.get('/:userID', (req, res) => {
     if(!data){
       console.log('user not found, Routes.js')
       let user = {
-        email: req.body.email,
+        googleID: req.body.googleID,
         username: req.body.username,
         password: req.body.password
       }
       db.insertNewUser(user)
       .then(() => {
-        db.getUser(user.email)
+        db.getUser(user.googleID)
         .then(user => {
           db.getCurrentActivities(user.id).then((activities) =>{
             console.log(activities)
             res.status(201).send(JSON.stringify({user, activities}))
+            return;
           })
         })
-        return;
       })
       .catch(err => {
         console.log('error: ', err)
         res.status(500).send();
       });
     }
+    res.status(200).send(JSON.stringify({user: data.account, activities: data.activities, assigned_activities: data.assigned_activities}))
+
   })
   .catch((err) => {
     console.log('error: ', err);
@@ -83,7 +85,7 @@ router.post('/updateCurrentActivities', (req, res) => {
 //Insert new user into users table
 // router.post('/newUser', (req, res) => {
 //   let user = {
-//     email: req.body.email,
+//     googleID: req.body.googleID,
 //     username: req.body.username,
 //     password: req.body.password
 //   }

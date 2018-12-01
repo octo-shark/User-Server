@@ -11,8 +11,8 @@ const knex = require('knex')(options[env]);
 
 //------------------ GET METHODS --------------------------------------------------------------------//
 
-const getUser = async (email) => {
-  let user = await knex.select('id', 'email', 'username').from('users').where({email});
+const getUser = async (googleID) => {
+  let user = await knex.select('id', 'googleID', 'username').from('users').where({googleID});
   if(!user){
     return null
   }
@@ -36,8 +36,8 @@ const getCurrentActivities = async (id) => {
   return result;
 }
 
-const exportCurrentUserData = async (email) => { // this variable here is the unique google ID google gives us. FIX ME?
-  let user = await getUser(email);
+const exportCurrentUserData = async (googleID) => { // this variable here is the unique google ID google gives us. FIX ME?
+  let user = await getUser(googleID);
   if(!user){
     return;
   }
