@@ -5,13 +5,9 @@ const db = require('./database/db.js');
 
 //Get user info from users table;
 router.get('/:userID', (req, res) => {
-  console.log('req.params.userID: ', req.params.userID);
-  
   db.exportCurrentUserData(req.params.userID)
   .then((data) => {
-    console.log("Data from export function:" ,data)
     if(!data){ 
-      console.log('user not found, Routes.js')
       let user = {
         googleID: req.params.userID,
         username: req.body.username,
@@ -21,14 +17,13 @@ router.get('/:userID', (req, res) => {
         db.getUser(user.googleID)
         .then(user => {
           db.getCurrentActivities(user.id).then((activities) =>{
-            console.log('Inserting new user with activities: ',activities)
             res.status(201).send(JSON.stringify({user, activities}))
             return;
           })
         })
       })
       .catch(err => {
-        console.log('error: ', err)
+        console.log('error db.insertNewUser(user): ', err)
         res.status(500).send();
       });
     }else{
@@ -37,7 +32,7 @@ router.get('/:userID', (req, res) => {
 
   })
   .catch((err) => {
-    console.log('error: ', err);
+    console.log('error db.exportCurrentUserData(req.params.userID): ', err);
     res.status(500).send();
   })
 });
@@ -47,7 +42,7 @@ router.get('/allActivities', (req, res) => {
   db.getAllActivities()
   .then(data => res.status(200).send(data))
   .catch(err => {
-    console.log('error: ', err);
+    console.log('error db.getAllActivities(): ', err);
     res.status(500).send()
   });
 });
@@ -64,7 +59,7 @@ router.post('/newActivity', (req, res) => {
   db.insertNewActivity(activity)
   .then(() => res.status(201).send(`${activity.activity_name} successfully inserted`))
   .catch(err => {
-    console.log('error: ', err);
+    console.log('error db.insertNewActivity(activity): ', err);
     res.status(500).send();
   });
 });
@@ -77,25 +72,9 @@ router.post('/updateCurrentActivities', (req, res) => {
     res.status(201).send(`successfully created activities for user`)
   )
   .catch(err => {
-    console.log(`error: ${err}`);
+    console.log(`error db.updateCurrentActivities(activities, req.body.id): ${err}`);
     res.status(500).send();
   });
 })
 
-//******  needs to be refactored when authentication is implemented **********
-//Insert new user into users table
-// router.post('/newUser', (req, res) => {
-//   let user = {
-//     googleID: req.body.googleID,
-//     username: req.body.username,
-//     password: req.body.password
-//   }
-
-//   db.insertNewUser(user)
-//   .then(() => res.status(201).send('user successfully inserted'))
-//   .catch(err => {
-//     console.log('error: ', err)
-//     res.status(500).send();
-//   });
-// });
 module.exports = router;
