@@ -75,6 +75,17 @@ router.post('/updateCurrentActivities', (req, res) => {
     console.log(`error db.updateCurrentActivities(activities, req.body.id): ${err}`);
     res.status(500).send();
   });
+});
+
+router.post('/updateActivity', (req, res) => {
+  db.updateActivity(req.body)
+  .then(() => 
+    res.status(201).send('successfully updated activity') 
+  )
+  .catch(err => {
+    console.log('error: ', err);
+    res.status(500).send();
+  })
 })
 
 module.exports = router;

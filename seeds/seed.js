@@ -8,11 +8,11 @@ exports.seed = function(knex, Promise) {
     .then(() => 
       // Inserts seed entries
        knex('users').insert([
-        {googleID: 'Null1', username: 'mitch', current_activities: 1},
-        {googleID: 'Null2', username: 'chris', current_activities: 2},
-        {googleID: 'Null3', username: 'ethan', current_activities: 3},
-        {googleID: 'Null4', username: 'rikki', current_activities: 4},
-        {googleID: 'Null5', username: 'stephen', current_activities: 5}
+        {googleID: 'Null1', username: 'mitch'},
+        {googleID: 'Null2', username: 'chris'},
+        {googleID: 'Null3', username: 'ethan'},
+        {googleID: 'Null4', username: 'rikki'},
+        {googleID: 'Null5', username: 'stephen'}
       ])
     )
 

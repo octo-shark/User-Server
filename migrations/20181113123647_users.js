@@ -5,7 +5,6 @@ exports.up = function(knex, Promise) {
       table.increments('id').primary();
       table.string('googleID').unique();
       table.string('username');
-      table.integer('current_activities_id');
     })
     .createTable('current_activities', (table) => {
       table.integer('current_activities_id');
