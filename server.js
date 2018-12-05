@@ -12,4 +12,4 @@ app.use(bodyParser.json());
 
 app.use('/users', routes);
 
-app.listen(port, () => console.log(`listening on port ${port}`));
+app.listen(port, () => console.log(`listening on port ${port}`)); 

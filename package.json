@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon ./server.js",
-    "create-db": "createdb timemate; knex migrate:latest --env development; knex seed:run --env development",
+    "create-db": "createdb timemate; knex migrate:latest --env staging; knex seed:run --env staging",
     "rds-db": "knex migrate:latest --env staging; knex seed:run --env staging"
   },
   "repository": {
