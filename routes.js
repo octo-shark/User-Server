@@ -4,6 +4,14 @@ const router = require('express').Router();
 const db = require('./database/db.js');
 
 //Get user info from users table;
+
+router.get('/loggedInUser', (req, res) => {
+  db.exportCurrentUserData(req.body.userID)
+  .then(data => {
+    res.status(201).send(data)
+  });
+})
+
 router.get('/:userID', (req, res) => {
   db.exportCurrentUserData(req.params.userID)
   .then((data) => {
@@ -78,6 +86,7 @@ router.post('/updateCurrentActivities', (req, res) => {
 });
 
 router.post('/updateActivity', (req, res) => {
+  console.log(req.body)
   db.updateActivity(req.body)
   .then(() => 
     res.status(201).send('successfully updated activity') 
