@@ -130,7 +130,7 @@ const updateActivity = async (activity) => {
       .where({activity_id :activity.activity_id})
       .update({
         activity_name: activity.activity_name,
-        color: activity.color
+        color: activity.activity_color
       })
   return updatedActivities;
 }
