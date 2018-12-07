@@ -31,7 +31,6 @@ router.get('/:userID', (req, res) => {
         })
       })
       .catch(err => {
-        console.log('error db.insertNewUser(user): ', err)
         res.status(500).send();
       });
     }else{
@@ -40,7 +39,6 @@ router.get('/:userID', (req, res) => {
 
   })
   .catch((err) => {
-    console.log('error db.exportCurrentUserData(req.params.userID): ', err);
     res.status(500).send();
   })
 });
@@ -50,7 +48,6 @@ router.get('/allActivities', (req, res) => {
   db.getAllActivities()
   .then(data => res.status(200).send(data))
   .catch(err => {
-    console.log('error db.getAllActivities(): ', err);
     res.status(500).send()
   });
 });
@@ -67,7 +64,6 @@ router.post('/newActivity', (req, res) => {
   db.insertNewActivity(activity)
   .then(() => res.status(201).send(`${activity.activity_name} successfully inserted`))
   .catch(err => {
-    console.log('error db.insertNewActivity(activity): ', err);
     res.status(500).send();
   });
 });
@@ -80,19 +76,16 @@ router.post('/updateCurrentActivities', (req, res) => {
     res.status(201).send(`successfully created activities for user`)
   )
   .catch(err => {
-    console.log(`error db.updateCurrentActivities(activities, req.body.id): ${err}`);
     res.status(500).send();
   });
 });
 
 router.post('/updateActivity', (req, res) => {
-  console.log(req.body)
   db.updateActivity(req.body)
   .then(() => 
     res.status(201).send('successfully updated activity') 
   )
   .catch(err => {
-    console.log('error: ', err);
     res.status(500).send();
   })
 })

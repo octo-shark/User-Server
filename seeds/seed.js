@@ -8,24 +8,13 @@ exports.seed = function(knex, Promise) {
     .then(() => 
       // Inserts seed entries
        knex('users').insert([
-        {googleID: 'Null1', username: 'mitch'},
-        {googleID: 'Null2', username: 'chris'},
-        {googleID: 'Null3', username: 'ethan'},
-        {googleID: 'Null4', username: 'rikki'},
-        {googleID: 'Null5', username: 'stephen'}
+        {googleID: 'Null1', username: 'user1'},
+        {googleID: 'Null2', username: 'user2'},
+        {googleID: 'Null3', username: 'user3'},
+        {googleID: 'Null4', username: 'user4'},
+        {googleID: 'Null5', username: 'user5'}
       ])
     )
-
-    /*
-    '1': {color: '#b9f6ca', name: 'Reading'},
-    '2': {color: '#84ffff', name: 'Phone Calls'},
-    '3': {color: '#b388ff', name: 'Browsing Reddit'},
-    '4': {color: '#ff80ab', name: 'Walking in Circles'},
-    '26': {color: '#ff9e80', name: 'Complaining'},
-    '33': {color: '#ffff8d', name: 'Debugging'},
-    '66': {color: '#80d8ff', name: 'Lunch'},
-    '76': {color: '#ea80fc', name: 'Napping'}
-    */
     .then(() => 
       knex('activities').insert([
         {activity_name: 'Reading', color: '#b9f6ca'},
@@ -41,7 +30,6 @@ exports.seed = function(knex, Promise) {
     .then(async () => {
       const users = await knex.select().from('users');
       const firstActivity = await knex.select('activity_id').from('activities');
-      console.log(firstActivity)
       const result = await users.map((user, i) => {
         return {current_activities_id: user.id, current_activities_array: Array(8).fill(firstActivity[0].activity_id,0,8)}
       })

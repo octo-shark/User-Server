@@ -3,12 +3,6 @@ require('dotenv').config();
 let env = process.env.ENVIRONMENT || 'development';
 const knex = require('knex')(options[env]);
 
-//This function is for test purposes only, not for production
-// const getAllUsers = async () => {
-  //   let users = await knex.select('*').from('users');
-  //   return users;
-  // }
-
 //------------------ GET METHODS --------------------------------------------------------------------//
 
 const getUser = async (googleID) => {
@@ -26,7 +20,6 @@ const getHistoricalActivities = async (id) => {
 }
 
 const getCurrentActivities = async (id) => {
-  console.log('getCurrentAct: ', id)
   let result = await knex.select('current_activities_array')
   .from('current_activities')
   .where({
@@ -53,31 +46,18 @@ const exportCurrentUserData = async (googleID) => { // this variable here is the
 
 const getAllActivities = async () => {
   let result = await knex.select('*').from('activities');
-  console.log(result);
   return result;
 };
-
-//---------------- Not in Use -------------------------------//
-// const getActivityNames = async (activityArray) => {
-  //   let names = await knex.select('*')
-  //     .from('activities')
-  //     .whereIn('activity_id', activityArray);
-  //   return names;
-  // }
-//----------------------------------------------------------//
 
 //------------------ POST METHODS --------------------------------------------------------------------//
 
 const insertNewActivity = async (activity) => {
-  console.log(`attempting to insert ${activity.activity_name}`);
   let newActivity = await knex('activities').insert(activity).returning('activity_id');
-  console.log('newActivity = ', newActivity)
   return newActivity;
 };
 
 const updateCurrentActivities = async (activities, userId) => {
   if(activities.length > 8) {
-    console.log('invalid array length');
     throw new Error('invalid array length');
   }
   let currentUserActivities = await 
@@ -103,24 +83,15 @@ const insertNewUser = async (user) => {
   ]
   for(let i = 0; i < 8; i++){
     let activity = templateActivities[i];
-    // console.log('Activity to db: ',activity)
     let id = await insertNewActivity(activity)
     ids.push(id[0])
   }
-  console.log(ids)
-  // knex.select('activity_id').from('activities').limit(8).then((data) =>{
-  //   ids = data;
-  //   let expample=ids.map(i => {return i.activity_id})
-  //   console.log('activityIDs', expample)
-  // })
-  
   let newUser = await knex('users').insert(user)
     .then(() => 
       knex('current_activities').insert({
         current_activities_id: knex.select('id').from('users').where({googleID: user.googleID}), 
         current_activities_array: ids.map(i => {return i}) //[473,474,475,476,474,478,479,480]
       }))
-  console.log('newUser inserted: ',newUser);
   return newUser;
 };
 
@@ -146,6 +117,4 @@ module.exports = {
   updateCurrentActivities: updateCurrentActivities,
   insertNewUser: insertNewUser,
   updateActivity: updateActivity,
-  //getAllUsers: getAllUsers,
-  //getActivityNames: getActivityNames
 };
